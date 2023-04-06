@@ -5,6 +5,7 @@ import time
 from collections import Counter
 from collections import defaultdict
 from functools import partial
+from itertools import zip_longest
 
 from dataclasses import dataclass
 from dataclasses import field
@@ -100,12 +101,21 @@ def gen_subscriptions_worker(
         field_occurrence = [field] * field_count
         assert len(field_occurrence) == len(operators)
         together = list(zip(field_occurrence, operators, (gen_value(field) for _ in range(field_count))))
-        together.extend([(None, None)] * (n - field_count))
-        assert len(together) == n
+        # together.extend([(None, None)] * (n - field_count))
+        # assert len(together) == n
         random.shuffle(together)
-        fields_stack.append(together)
+        fields_stack.extend(together)
         # time.sleep(0.4)
-    return list(tuple(n for n in filt if n[0] is not None) for filt in zip(*fields_stack))
+    chunks = []
+    while fields_stack:
+        chunk = []
+        for _ in range(min(n, len(fields_stack))):
+            chunk.append(fields_stack.pop())
+        if chunk:
+            chunks.append(chunk)
+    res = list(tuple(n for n in filt if n is not None) for filt in zip_longest(*chunks))
+    # print(len(res), 'vs', n)
+    return res
 
 
 # --- Models ---
@@ -268,9 +278,8 @@ def combine_sub_worker_results(results):
 
 def print_sub_counts(counter, op_counter, op = "="):       
     print("-" * 100)
-    (_, n), = counter.most_common(1)   # [('station_id', 10000)]   # (heuristic)
-    print("Total subscriptions:", n)
-    print("Field name".ljust(20), "Counts".ljust(10), f"Op {op!r}".ljust(10), "Percentage".ljust(15), f"Op {op!r} percentage")
+    # (_, n), = counter.most_common(1)   # [('station_id', 10000)]   # (heuristic)
+    print("Field name".ljust(20), "Counts".ljust(10), f"Op {op!r}".ljust(10), f"Op {op!r} percentage")
     print("-" * 100)
     for field, counts in sorted(counter.items()):
 
@@ -278,7 +287,6 @@ def print_sub_counts(counter, op_counter, op = "="):
             field.ljust(20),
             str(counts).ljust(10),
             str(op_counter[field][op]).ljust(10),
-            str(round(counts / n, 2) * 100).ljust(15),
             str(round(op_counter[field][op] / counts, 2) * 100).ljust(10),
         )
     print("-" * 100)
@@ -292,32 +300,24 @@ if __name__ == "__main__":
     import cpuinfo     # mamba install py-cpuinfo   OR   pip install py-cpuinfo
 
     print("Testing subscription generator.")
-    print("Testing platform information:")
+    print("Testing platform:")
     for key, value in cpuinfo.get_cpu_info().items():
         if key.startswith("cpuinfo"):
             continue
         print("\t{0}: {1}".format(key, value))
 
-    n = 1_000_000
+    n = 100_000
     num_workers = 5
-
     field_percentages = {
         "city": 0.2,
         "temp": 0.71,
-        "station_id": 0.955,
     }
     op_percentages = {
         ("city", "="): 0.5,
-        ("station_id", "="): 0.5,
     }
-    
-    print("Parameters:")
-    print(field_percentages)
-    print(op_percentages)
-
     sharder = SubGenSharder()
 
-    print("\nTesting MULTIPROCESSING work on num workers:", num_workers)
+    print("Testing MULTIPROCESSING work on num workers:", num_workers)
     start_time = time.perf_counter()
     workers = sharder.shard(
         n,
@@ -334,8 +334,8 @@ if __name__ == "__main__":
 
     total_time = time.perf_counter() - start_time
     print("Generated", n, "subscriptions over", num_workers, "workers")
-    print(f'Duration: {total_time:.3f}')
-    print("Rate of subscriptions per second:", round(n / max(1, total_time), 1))
+    print('Duration: {}'.format(total_time))
+    print("Rate of subscriptions per second:", round(n / max(1, total_time) / 1000, 3))
     print_sub_counts(*combine_sub_worker_results(results))   # PRINT COUNTS
     print(results[0][:2])
     print("-" * 100, end="\n\n")
@@ -357,7 +357,7 @@ if __name__ == "__main__":
 
     total_time = time.perf_counter() - start_time
     print("Generated", n, "subscriptions over", num_workers, "workers")
-    print(f'Duration: {total_time:.3f}')
-    print("Rate of subscriptions per second:", round(n / max(1, total_time), 1))
+    print(f'Duration: {total_time}')
+    print("Rate of subscriptions per second:", round(n / max(1, total_time) / 1000, 3))
     print_sub_counts(*combine_sub_worker_results(results))   # PRINT COUNTS
     print(results[0][:2])
