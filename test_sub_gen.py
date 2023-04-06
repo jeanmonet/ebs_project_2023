@@ -26,9 +26,12 @@ if __name__ == "__main__":
     num_workers = 5
 
     field_percentages = {
-        "city": 0.2,
-        "temp": 0.71,
-        "station_id": 0.955,
+        "city": 0.5,
+        "temp": 0.5,
+        "station_id": 0.3,
+        "wind": 0.,
+        "wind_direction": 0.,
+        "date": 0.,
     }
     op_percentages = {
         ("city", "="): 0.5,
