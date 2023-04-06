@@ -87,4 +87,7 @@ if __name__ == "__main__":
     print(f'Duration: {total_time:.3f}')
     print("Rate of subscriptions per second:", round(n / max(1, total_time), 1))
     print_sub_counts(*combine_sub_worker_results(results))   # PRINT COUNTS
-    print(results[0][:2])
+    # print(results[0][:2])
+    for res in results:
+        for sub in res:
+            print(sub)
