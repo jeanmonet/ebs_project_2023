@@ -48,51 +48,100 @@ $ python test_sub_gen.py
 
 ```bash
 Testing subscription generator.
-Testing platform information:
-	python_version: 3.9.16.final.0 (64 bit)
-	arch: ARM_8
-	bits: 64
-	count: 10
-	arch_string_raw: arm64
-	brand_raw: Apple M1 Pro
-Parameters:
-{'city': 0.2, 'temp': 0.71, 'station_id': 0.955}
-{('city', '='): 0.5, ('station_id', '='): 0.5}
 
-Testing MULTIPROCESSING work on num workers: 5
-Generated 1000000 subscriptions over 5 workers
-Duration: 2.831
-Rate of subscriptions per second: 353286.9
-----------------------------------------------------------------------------------------------------
-Total subscriptions: 1000000
-Field name           Counts     Op '='     Percentage      Op '=' percentage
-----------------------------------------------------------------------------------------------------
-city                 200000     150099     20.0            75.0      
-date                 1000000    166788     100.0           17.0      
-station_id           955000     557193     95.0            57.99999999999999
-temp                 710000     118473     71.0            17.0      
-wind                 1000000    166621     100.0           17.0      
-wind_direction       1000000    499034     100.0           50.0      
-----------------------------------------------------------------------------------------------------
-[(('city', '=', 'Berne'), ('temp', '>=', 34.55), ('wind', '<', 25.5), ('wind_direction', '=', 'V'), ('date', '!=', datetime.datetime(2020, 1, 7, 11, 54, 54))),
- (('temp', '!=', 33.45), ('wind', '<=', 68.55), ('wind_direction', '=', 'SE'), ('date', '<=', datetime.datetime(2022, 12, 11, 22, 59, 40)))]
-----------------------------------------------------------------------------------------------------
+I. Testing platform information:
+		python_version: 3.9.16.final.0 (64 bit)
+		arch: ARM_8
+		bits: 64
+		count: 10
+		arch_string_raw: arm64
+		brand_raw: Apple M1 Pro
+	Parameters:
+	{'city': 0.2, 'temp': 0.71, 'station_id': 0.955}
+	{('city', '='): 0.5, ('station_id', '='): 0.5}
 
-Testing MULTITHREADING work on num workers: 5
-Generated 1000000 subscriptions over 5 workers
-Duration: 8.929
-Rate of subscriptions per second: 111995.6
-----------------------------------------------------------------------------------------------------
-Total subscriptions: 1000000
-Field name           Counts     Op '='     Percentage      Op '=' percentage
-----------------------------------------------------------------------------------------------------
-city                 200000     149726     20.0            75.0      
-date                 1000000    166628     100.0           17.0      
-station_id           955000     557290     95.0            57.99999999999999
-temp                 710000     118068     71.0            17.0      
-wind                 1000000    166266     100.0           17.0      
-wind_direction       1000000    501157     100.0           50.0      
-----------------------------------------------------------------------------------------------------
-[(('station_id', '<=', 72), ('temp', '=', -0.15), ('wind', '>=', 89.2), ('wind_direction', '=', 'E'), ('date', '>=', datetime.datetime(2022, 3, 21, 5, 14, 35))),
- (('station_id', '=', 74), ('wind', '<=', 20.15), ('wind_direction', '=', 'SV'), ('date', '=', datetime.datetime(2020, 10, 2, 7, 29, 58)))]
+	Testing MULTIPROCESSING work on num workers: 5
+	Generated 1000000 subscriptions over 5 workers
+	Duration: 2.831
+	Rate of subscriptions per second: 353286.9
+	----------------------------------------------------------------------------------------------------
+	Total subscriptions: 1000000
+	Field name           Counts     Op '='     Percentage      Op '=' percentage
+	----------------------------------------------------------------------------------------------------
+	city                 200000     150099     20.0            75.0      
+	date                 1000000    166788     100.0           17.0      
+	station_id           955000     557193     95.0            57.99999999999999
+	temp                 710000     118473     71.0            17.0      
+	wind                 1000000    166621     100.0           17.0      
+	wind_direction       1000000    499034     100.0           50.0      
+	----------------------------------------------------------------------------------------------------
+	[(('city', '=', 'Berne'), ('temp', '>=', 34.55), ('wind', '<', 25.5), ('wind_direction', '=', 'V'), ('date', '!=', datetime.datetime(2020, 1, 7, 11, 54, 54))),
+	(('temp', '!=', 33.45), ('wind', '<=', 68.55), ('wind_direction', '=', 'SE'), ('date', '<=', datetime.datetime(2022, 12, 11, 22, 59, 40)))]
+	----------------------------------------------------------------------------------------------------
+
+	Testing MULTITHREADING work on num workers: 5
+	Generated 1000000 subscriptions over 5 workers
+	Duration: 8.929
+	Rate of subscriptions per second: 111995.6
+	----------------------------------------------------------------------------------------------------
+	Total subscriptions: 1000000
+	Field name           Counts     Op '='     Percentage      Op '=' percentage
+	----------------------------------------------------------------------------------------------------
+	city                 200000     149726     20.0            75.0      
+	date                 1000000    166628     100.0           17.0      
+	station_id           955000     557290     95.0            57.99999999999999
+	temp                 710000     118068     71.0            17.0      
+	wind                 1000000    166266     100.0           17.0      
+	wind_direction       1000000    501157     100.0           50.0      
+	----------------------------------------------------------------------------------------------------
+	[(('station_id', '<=', 72), ('temp', '=', -0.15), ('wind', '>=', 89.2), ('wind_direction', '=', 'E'), ('date', '>=', datetime.datetime(2022, 3, 21, 5, 14, 35))),
+	(('station_id', '=', 74), ('wind', '<=', 20.15), ('wind_direction', '=', 'SV'), ('date', '=', datetime.datetime(2020, 10, 2, 7, 29, 58)))]
+
+
+
+II. Testing platform information:
+			python_version: 3.9.6.final.0 (64 bit)
+			arch: ARM_8
+			bits: 64
+			count: 10
+			arch_string_raw: arm64
+			brand_raw: Apple M1 Pro
+	Parameters:
+	{'city': 0.2, 'temp': 0.71, 'station_id': 0.955}
+	{('city', '='): 0.5, ('station_id', '='): 0.5}
+
+	Testing MULTIPROCESSING work on num workers: 5
+	Generated 1000000 subscriptions over 5 workers
+	Duration: 3.416
+	Rate of subscriptions per second: 292742.5
+	----------------------------------------------------------------------------------------------------
+	Total subscriptions: 1000000
+	Field name           Counts     Op '='     Percentage      Op '=' percentage
+	----------------------------------------------------------------------------------------------------
+	city                 200000     150043     20.0            75.0      
+	date                 1000000    166745     100.0           17.0      
+	station_id           955000     557220     95.0            57.99999999999999
+	temp                 710000     118944     71.0            17.0      
+	wind                 1000000    167119     100.0           17.0      
+	wind_direction       1000000    500763     100.0           50.0      
+	----------------------------------------------------------------------------------------------------
+	[(('station_id', '=', 5), ('temp', '=', 16.5), ('wind', '<', 89.0), ('wind_direction', '!=', 'E'), ('date', '<=', datetime.datetime(2023, 3, 17, 8, 53, 30))), (('station_id', '!=', 22), ('wind', '>=', 27.15), ('wind_direction', '=', 'E'), ('date', '>=', datetime.datetime(2022, 11, 13, 7, 36, 43)))]
+	----------------------------------------------------------------------------------------------------
+
+	Testing MULTITHREADING work on num workers: 5
+	Generated 1000000 subscriptions over 5 workers
+	Duration: 11.140
+	Rate of subscriptions per second: 89763.1
+	----------------------------------------------------------------------------------------------------
+	Total subscriptions: 1000000
+	Field name           Counts     Op '='     Percentage      Op '=' percentage
+	----------------------------------------------------------------------------------------------------
+	city                 200000     149973     20.0            75.0      
+	date                 1000000    166279     100.0           17.0      
+	station_id           955000     557401     95.0            57.99999999999999
+	temp                 710000     118171     71.0            17.0      
+	wind                 1000000    166357     100.0           17.0      
+	wind_direction       1000000    499228     100.0           50.0      
+	----------------------------------------------------------------------------------------------------
+	[(('station_id', '=', 82), ('temp', '!=', -20.25), ('wind', '!=', 23.05), ('wind_direction', '=', 'SV'), ('date', '>=', datetime.datetime(2022, 3, 15, 14, 24, 55))), (('station_id', '=', 21), ('temp', '<', 26.75), ('wind', '=', 93.05), ('wind_direction', '=', 'S'), ('date', '<', datetime.datetime(2022, 7, 9, 11, 7, 57)))]
 ```
