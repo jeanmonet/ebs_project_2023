@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     sharder = SubGenSharder()
 
-    print("Testing MULTIPROCESSING work on num workers:", num_workers)
+    print("\nTesting MULTIPROCESSING work on num workers:", num_workers)
     start_time = time.perf_counter()
     workers = sharder.shard(
         n,

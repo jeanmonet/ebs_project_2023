@@ -292,24 +292,32 @@ if __name__ == "__main__":
     import cpuinfo     # mamba install py-cpuinfo   OR   pip install py-cpuinfo
 
     print("Testing subscription generator.")
-    print("Testing platform:")
+    print("Testing platform information:")
     for key, value in cpuinfo.get_cpu_info().items():
         if key.startswith("cpuinfo"):
             continue
         print("\t{0}: {1}".format(key, value))
 
-    n = 100_000
+    n = 1_000_000
     num_workers = 5
+
     field_percentages = {
         "city": 0.2,
         "temp": 0.71,
+        "station_id": 0.955,
     }
     op_percentages = {
         ("city", "="): 0.5,
+        ("station_id", "="): 0.5,
     }
+    
+    print("Parameters:")
+    print(field_percentages)
+    print(op_percentages)
+
     sharder = SubGenSharder()
 
-    print("Testing MULTIPROCESSING work on num workers:", num_workers)
+    print("\nTesting MULTIPROCESSING work on num workers:", num_workers)
     start_time = time.perf_counter()
     workers = sharder.shard(
         n,

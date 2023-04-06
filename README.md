@@ -31,6 +31,8 @@ Setul de date generat va fi memorat in fisiere text. Tema se poate realiza in ec
 
 #### Requirements
 
+Python `>=3.9`.
+
 ```bash
 mamba install py-cpuinfo
 # OR
@@ -56,6 +58,7 @@ Testing platform information:
 Parameters:
 {'city': 0.2, 'temp': 0.71, 'station_id': 0.955}
 {('city', '='): 0.5, ('station_id', '='): 0.5}
+
 Testing MULTIPROCESSING work on num workers: 5
 Generated 1000000 subscriptions over 5 workers
 Duration: 2.831
