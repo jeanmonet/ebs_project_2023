@@ -1,6 +1,48 @@
 # ebs_project_2023
 Event based systems
 
+```
+			  PUB
+			  /|\
+
+		B1 - - - - B2 - - - - B3             ←—- simple routing algorithm
+
+               \|/         \|/          \|/    
+		S1          S2          S3
+```
+
+
+### How to run
+
+```bash
+# Start RabbitMQ nodes (clustered)
+./config/start_rmq.sh
+
+# (To stop rabbits:   ./config/stop_rmq.sh)
+
+# Start brokers (in separate console)
+python brokers.py
+
+# Send subscriptions (in separate console)
+#   -n argument for number of subscriptions
+python send_subscriptions.py -n 1000
+
+# Start subscribers (waiting to receive notifications) (in separate console)
+python subscribers.py
+
+# Start sending notifications (in separate console)
+#   -s argument for number of seconds (sending at circa 6k notifications per second)
+python publisher.py -s 0.1
+
+
+```
+
+Node logic & routing logic inside `rabbit.py` (simple routing & subscription matching).
+
+
+(Partial report: https://docs.google.com/document/d/1NJd4FBJmbbTTnvgH5mXBbBHhNYEe1-rA9Yv9YzHBdyQ/edit?usp=sharing)
+
+
 ### Task description
 
 Scrieti un program care sa genereze aleator seturi echilibrate de subscriptii si publicatii cu posibilitatea de fixare a: numarului total de mesaje (publicatii, respectiv subscriptii), ponderii pe frecventa campurilor din subscriptii si ponderii operatorilor de egalitate din subscriptii pentru cel putin un camp. Publicatiile vor avea o structura fixa de campuri. Implementarea temei va include o posibilitate de paralelizare pentru eficientizarea generarii subscriptiilor si publicatiilor, si o evaluare a timpilor obtinuti.

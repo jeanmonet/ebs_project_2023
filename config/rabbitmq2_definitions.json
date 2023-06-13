@@ -1,0 +1,11 @@
+{
+    "queues": [
+        {
+            "name": “broker2”,
+            "durable": false,
+            "auto_delete": false,
+            "arguments": {}
+        }
+    ]
+}
+

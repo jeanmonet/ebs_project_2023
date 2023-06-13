@@ -9,6 +9,7 @@ from itertools import zip_longest
 
 from dataclasses import dataclass
 from dataclasses import field
+from dataclasses import asdict
 
 from typing import Iterator
 from typing import Literal
@@ -33,9 +34,9 @@ CITIES = [
 DIRECTIONS = ["N", "NE", "NV", "S", "SE", "SV", "V", "E"]
 DEFAULT_VAL_RANGES = {
     "station_id": (0, 100),                 # tuple[int, int]
-    "temp": (-25, 71),                      # tuple[float, float]
-    "wind": (0, 100),                       # tuple[float, float]
-    "date": ("2020-01-01", "2023-04-01"),   # tuple[str, str]
+    "temp": (-25, 25),                      # tuple[float, float]
+    "wind": (10, 30),                       # tuple[float, float]
+    "date": ("2023-06-01", "2023-06-05"),   # tuple[str, str]
     "city": CITIES,
     "wind_direction": DIRECTIONS,
 }
@@ -66,6 +67,11 @@ def gen_value(
     if field_name in ("city", "wind_direction"):
         return random.choice(val_range)
     raise ValueError("Unknown field name?", field_name)
+
+
+def split_stack(fields_stack, n):
+    chunks = [fields_stack[i: i + n] for i in range(0, len(fields_stack), n)]
+    return [list(filter(None, filt)) for filt in zip_longest(*chunks)]
 
 
 def gen_subscriptions_worker(
@@ -106,16 +112,7 @@ def gen_subscriptions_worker(
         random.shuffle(together)
         fields_stack.extend(together)
         # time.sleep(0.4)
-    chunks = []
-    while fields_stack:
-        chunk = []
-        for _ in range(min(n, len(fields_stack))):
-            chunk.append(fields_stack.pop())
-        if chunk:
-            chunks.append(chunk)
-    res = list(tuple(n for n in filt if n is not None) for filt in zip_longest(*chunks))
-    # print(len(res), 'vs', n)
-    return res
+    return split_stack(fields_stack, n)
 
 
 # --- Models ---
@@ -140,16 +137,15 @@ class Publication:
         temp_range: tuple[float, float] = None,
         wind_range: tuple[float, float] = None,
         date_range: tuple[str, str] = None,
-        
-    ) -> "Publication":
-        return cls(
+    ) -> list[tuple[str, FilterValT]]:
+        return list(asdict(cls(
             station_id=gen_value("station_id"),
             city=gen_value("city"),
             temp=gen_value("temp", temp_range),
             wind=gen_value("wind", wind_range),
             wind_direction=gen_value("wind_direction"),
             date=gen_value("date", date_range),
-        )
+        )).items())
 
     @classmethod
     def generate_n(
@@ -157,7 +153,7 @@ class Publication:
         n: int,
         *args,
         **kwargs,
-    ) -> Iterator["Publication"]:
+    ) -> Iterator[list[tuple[str, FilterValT]]]:
         for i in range(n):
             yield cls.generate_one(*args, **kwargs)
 
